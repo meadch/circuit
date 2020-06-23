@@ -11,8 +11,7 @@ const Timer = ({ duration, onDone }) => {
         duration,
         elapsed: 0,
         interval: 0.1,
-        inactive: context.inactive,
-        autoStart: context.autoStart
+        workoutState: context.workoutState
       })
       .withConfig({ actions: { onDone } })
   );
@@ -33,7 +32,6 @@ const Timer = ({ duration, onDone }) => {
           <progress max={duration} value={elapsed} />
         </label>
         <label>
-          {/* {state.matches("inactive") ? ( */}
           <button
             disabled={!state.matches("inactive")}
             onClick={e => {

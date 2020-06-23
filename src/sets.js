@@ -1,9 +1,9 @@
-const sets = [
+const movements = [
   {
     name: "Push-ups",
-    getReadyDuration: 2,
-    workDuration: 3,
-    restDuration: 4
+    getReadyDuration: 4,
+    workDuration: 8,
+    restDuration: 5
   },
   {
     name: "Burpees",
@@ -19,4 +19,13 @@ const sets = [
   }
 ];
 
-export default sets;
+const withRounds = rounds => movements =>
+  Array(rounds)
+    .fill()
+    .reduce((accum, val, i) => {
+      return accum.concat(
+        movements.map((m, j) => ({ ...m, round: i + 1, setNum: j + 1 }))
+      );
+    }, []);
+
+export default withRounds(3)(movements);

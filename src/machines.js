@@ -14,8 +14,11 @@ export const timerMachine = createMachine({
       on: {
         START: "running",
         "": [
-          { target: "running", cond: ctx => !ctx.inactive && ctx.autoStart },
-          { target: "paused", cond: ctx => !ctx.autoStart && !ctx.inactive }
+          {
+            target: "running",
+            cond: ctx => ctx.workoutState.matches("active")
+          },
+          { target: "paused", cond: ctx => ctx.workoutState.matches("paused") }
         ]
       }
     },
@@ -77,6 +80,17 @@ export const setMachine = createMachine({
     getReady: { on: { DONE: "working" } },
     working: { on: { DONE: "resting" } },
     resting: { on: { DONE: "completed" } },
+    completed: { type: "final", entry: "onDone" }
+  }
+});
+
+export const workoutMachine = createMachine({
+  id: "workout",
+  initial: "inactive",
+  states: {
+    inactive: { on: { START: "active" } },
+    active: { on: { PAUSE: "paused", DONE: "completed" } },
+    paused: { on: { RESUME: "active", DONE: "completed" } },
     completed: { type: "final", entry: "onDone" }
   }
 });
